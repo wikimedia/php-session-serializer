@@ -90,7 +90,7 @@ class PhpSessionSerializerTest extends \PHPUnit_Framework_TestCase {
 			'false' => false,
 			'int' => 42,
 			'zero' => 0,
-			'double' => 12.34,
+			'double' => 12.75,
 			'inf' => INF,
 			'-inf' => -INF,
 			'string' => 'string',
@@ -226,7 +226,7 @@ class PhpSessionSerializerTest extends \PHPUnit_Framework_TestCase {
 		return array(
 			'std' => array(
 				self::$standardArray,
-				'true|b:1;false|b:0;int|i:42;zero|i:0;double|d:12.34;inf|d:INF;-inf|d:-INF;string|s:' .
+				'true|b:1;false|b:0;int|i:42;zero|i:0;double|d:12.75;inf|d:INF;-inf|d:-INF;string|s:' .
 					'6:"string";empty string|s:0:"";array|a:6:{i:0;i:0;i:1;i:1;i:100;i:100;i:3;i:3;i:2;i' .
 					':2;s:3:"foo";s:3:"bar";}empty array|a:0:{}object|O:8:"stdClass":1:{s:3:"foo";s:3:"f' .
 					'oo";}empty object|O:8:"stdClass":0:{}null|N;|s:9:"empty key";long key -------------' .
@@ -355,7 +355,7 @@ class PhpSessionSerializerTest extends \PHPUnit_Framework_TestCase {
 		return array(
 			'std' => array(
 				self::$standardArray,
-				"\x04trueb:1;\x05falseb:0;\x03inti:42;\x04zeroi:0;\x06doubled:12.34;\x03infd:INF;\x04" .
+				"\x04trueb:1;\x05falseb:0;\x03inti:42;\x04zeroi:0;\x06doubled:12.75;\x03infd:INF;\x04" .
 					"-infd:-INF;\x06strings:6:\"string\";\x0cempty strings:0:\"\";\x05arraya:6:{i:0;i:0;i:1;" .
 					"i:1;i:100;i:100;i:3;i:3;i:2;i:2;s:3:\"foo\";s:3:\"bar\";}\x0bempty arraya:0:{}\x06object" .
 					"O:8:\"stdClass\":1:{s:3:\"foo\";s:3:\"foo\";}\x0cempty objectO:8:\"stdClass\":0:{}\x04" .
@@ -479,7 +479,7 @@ class PhpSessionSerializerTest extends \PHPUnit_Framework_TestCase {
 			array(
 				self::$standardArray,
 				'a:17:{s:4:"true";b:1;s:5:"false";b:0;s:3:"int";i:42;s:4:"zero";i:0;s:6:"double";d:1' .
-					'2.34;s:3:"inf";d:INF;s:4:"-inf";d:-INF;s:6:"string";s:6:"string";s:12:"empty string"' .
+					'2.75;s:3:"inf";d:INF;s:4:"-inf";d:-INF;s:6:"string";s:6:"string";s:12:"empty string"' .
 					';s:0:"";s:5:"array";a:6:{i:0;i:0;i:1;i:1;i:100;i:100;i:3;i:3;i:2;i:2;s:3:"foo";s:3:"' .
 					'bar";}s:11:"empty array";a:0:{}s:6:"object";O:8:"stdClass":1:{s:3:"foo";s:3:"foo";}s' .
 					':12:"empty object";O:8:"stdClass":0:{}s:4:"null";N;s:0:"";s:9:"empty key";i:42;i:42;' .
