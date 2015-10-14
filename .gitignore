@@ -1,0 +1,12 @@
+/coverage
+/doc
+/vendor
+/composer.lock
+
+# Editors
+*.kate-swp
+*~
+\#*#
+.#*
+.*.swp
+*.orig
