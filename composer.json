@@ -1,5 +1,5 @@
 {
-	"name": "mediawiki/php-session-serializer",
+	"name": "wikimedia/php-session-serializer",
 	"description": "Provides methods like PHP's session_encode and session_decode that don't mess with $_SESSION",
 	"license": "GPL-2.0+",
 	"homepage": "https://www.mediawiki.org/wiki/Php-session-serializer",
