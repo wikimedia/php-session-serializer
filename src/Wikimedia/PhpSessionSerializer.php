@@ -160,7 +160,7 @@ class PhpSessionSerializer {
 	 * @param mixed $value
 	 * @return string|null
 	 */
-	private function serializeValue( $value ) {
+	private static function serializeValue( $value ) {
 		try {
 			return serialize( $value );
 		} catch ( \Exception $ex ) {
@@ -174,7 +174,7 @@ class PhpSessionSerializer {
 	 * @param string &$string On success, the portion used is removed
 	 * @return array ( bool $success, mixed $value )
 	 */
-	private function unserializeValue( &$string ) {
+	private static function unserializeValue( &$string ) {
 		$error = null;
 		set_error_handler( function ( $errno, $errstr ) use ( &$error ) {
 			$error = $errstr;
