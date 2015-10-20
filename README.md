@@ -4,7 +4,7 @@ php-session-serializer
 ======================
 
 php-session-serializer is a PHP library that provides methods that work like
-PHP's [`session_encode`][phpencode] and [`session_decode`][phpdecode]
+PHP's [session_encode][phpencode] and [session_decode][phpdecode]
 functions, but don't mess with the `$_SESSION` superglobal.
 
 It supports the `php`, `php_binary`, and `php_serialize` serialize handlers.
@@ -14,18 +14,21 @@ It supports the `php`, `php_binary`, and `php_serialize` serialize handlers.
 Usage
 -----
 
-    // (optional) Send logs to a PSR-3 logger
-    \Wikimedia\PhpSesssionSerializer::setLogger( $logger )
+<pre lang="php">
+use Wikimedia\PhpSesssionSerializer;
 
-    // (optional) Ensure that session.serialize_handler is set to a usable value
-    \Wikimedia\PhpSesssionSerializer::setSerializeHandler();
+// (optional) Send logs to a PSR-3 logger
+PhpSesssionSerializer::setLogger( $logger )
 
-    // Encode session data
-    $string = \Wikimedia\PhpSesssionSerializer::encode( $array );
+// (optional) Ensure that session.serialize_handler is set to a usable value
+PhpSesssionSerializer::setSerializeHandler();
 
-    // Decode session data
-    $array = \Wikimedia\PhpSesssionSerializer::decode( $string );
+// Encode session data
+$string = PhpSesssionSerializer::encode( $array );
 
+// Decode session data
+$array = PhpSesssionSerializer::decode( $string );
+</pre>
 
 Running tests
 -------------
