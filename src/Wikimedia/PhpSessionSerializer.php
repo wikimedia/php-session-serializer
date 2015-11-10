@@ -124,7 +124,8 @@ class PhpSessionSerializer {
 
 	/**
 	 * Decode a session string to an array, using the format in session.serialize_handler
-	 * @param string $data Session data
+	 * @param string $data Session data. Use the same caution in passing
+	 *   user-controlled data here that you would to PHP's unserialize function.
 	 * @return array|null Data, or null on failure
 	 * @throws \\DomainException
 	 * @throws \\InvalidArgumentException
@@ -230,7 +231,8 @@ class PhpSessionSerializer {
 	/**
 	 * Decode a session string in 'php' format to an array
 	 * @note Generally you'll use self::decode() instead of this method.
-	 * @param string $data Session data
+	 * @param string $data Session data. Use the same caution in passing
+	 *   user-controlled data here that you would to PHP's unserialize function.
 	 * @return array|null Data, or null on failure
 	 * @throws \\InvalidArgumentException
 	 */
@@ -300,7 +302,8 @@ class PhpSessionSerializer {
 	/**
 	 * Decode a session string in 'php_binary' format to an array
 	 * @note Generally you'll use self::decode() instead of this method.
-	 * @param string $data Session data
+	 * @param string $data Session data. Use the same caution in passing
+	 *   user-controlled data here that you would to PHP's unserialize function.
 	 * @return array|null Data, or null on failure
 	 * @throws \\InvalidArgumentException
 	 */
@@ -357,7 +360,8 @@ class PhpSessionSerializer {
 	/**
 	 * Decode a session string in 'php_serialize' format to an array
 	 * @note Generally you'll use self::decode() instead of this method.
-	 * @param string $data Session data
+	 * @param string $data Session data. Use the same caution in passing
+	 *   user-controlled data here that you would to PHP's unserialize function.
 	 * @return array|null Data, or null on failure
 	 * @throws \\InvalidArgumentException
 	 */
