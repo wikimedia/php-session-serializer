@@ -395,4 +395,4 @@ class PhpSessionSerializer {
 
 }
 
-PhpSessionSerializer::setLogger( new \Psr\Log\NullLogger() );
+PhpSessionSerializer::setLogger( new \Psr\Log\NullLogger() ); // @codeCoverageIgnore
