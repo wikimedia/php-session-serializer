@@ -58,11 +58,11 @@ class PhpSessionSerializer {
 	 * @throws \\DomainException
 	 */
 	public static function setSerializeHandler() {
-		$formats = array(
+		$formats = [
 			'php_serialize',
 			'php',
 			'php_binary',
-		);
+		];
 
 		// First, try php_serialize since that's the only one that doesn't suck in some way.
 		\MediaWiki\suppressWarnings();
@@ -186,7 +186,7 @@ class PhpSessionSerializer {
 
 		if ( $error !== null ) {
 			self::$logger->error( 'Value unserialization failed: ' . $error );
-			return array( false, null );
+			return [ false, null ];
 		}
 
 		$serialized = serialize( $ret );
@@ -195,11 +195,11 @@ class PhpSessionSerializer {
 			self::$logger->error(
 				'Value unserialization failed: read value does not match original string'
 			);
-			return array( false, null );
+			return [ false, null ];
 		}
 
 		$string = substr( $string, $l );
-		return array( true, $ret );
+		return [ true, $ret ];
 	}
 
 	/**
@@ -241,7 +241,7 @@ class PhpSessionSerializer {
 			throw new \InvalidArgumentException( '$data must be a string' );
 		}
 
-		$ret = array();
+		$ret = [];
 		while ( $data !== '' && $data !== false ) {
 			$i = strpos( $data, '|' );
 			if ( $i === false ) {
@@ -312,7 +312,7 @@ class PhpSessionSerializer {
 			throw new \InvalidArgumentException( '$data must be a string' );
 		}
 
-		$ret = array();
+		$ret = [];
 		while ( $data !== '' && $data !== false ) {
 			$l = ord( $data[0] );
 			if ( strlen( $data ) < ( $l & 127 ) + 1 ) {

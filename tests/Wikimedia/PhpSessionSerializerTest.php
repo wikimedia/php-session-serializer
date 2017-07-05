@@ -85,7 +85,7 @@ class PhpSessionSerializerTest extends \PHPUnit_Framework_TestCase {
 
 	protected static function initTestData() {
 		self::$longKey = str_pad( 'long key ', 128, '-' );
-		self::$standardArray = array(
+		self::$standardArray = [
 			'true' => true,
 			'false' => false,
 			'int' => 42,
@@ -95,15 +95,15 @@ class PhpSessionSerializerTest extends \PHPUnit_Framework_TestCase {
 			'-inf' => -INF,
 			'string' => 'string',
 			'empty string' => '',
-			'array' => array( 0, 1, 100 => 100, 3 => 3, 2 => 2, 'foo' => 'bar' ),
-			'empty array' => array(),
-			'object' => (object)array( 'foo' => 'foo' ),
+			'array' => [ 0, 1, 100 => 100, 3 => 3, 2 => 2, 'foo' => 'bar' ],
+			'empty array' => [],
+			'object' => (object)[ 'foo' => 'foo' ],
 			'empty object' => new \stdClass,
 			'null' => null,
 			'' => 'empty key',
 			42 => 42,
 			self::$longKey => 'long key',
-		);
+		];
 
 		self::$closure = function () {
 		};
@@ -131,28 +131,28 @@ class PhpSessionSerializerTest extends \PHPUnit_Framework_TestCase {
 		$this->assertSame( $ret, \ini_get( 'session.serialize_handler' ) );
 
 		// Test setting php_serialize
-		$this->mockIniAllowed = array( 'php_serialize', 'php', 'php_binary' );
+		$this->mockIniAllowed = [ 'php_serialize', 'php', 'php_binary' ];
 		$this->mockIniValue = 'php_binary';
 		$ret = PhpSessionSerializer::setSerializeHandler();
 		$this->assertSame( 'php_serialize', $this->mockIniValue );
 		$this->assertSame( $ret, $this->mockIniValue );
 
 		// Test defaulting to current if it's supported
-		$this->mockIniAllowed = array( 'php', 'php_binary' );
+		$this->mockIniAllowed = [ 'php', 'php_binary' ];
 		$this->mockIniValue = 'php_binary';
 		$ret = PhpSessionSerializer::setSerializeHandler();
 		$this->assertSame( 'php_binary', $this->mockIniValue );
 		$this->assertSame( $ret, $this->mockIniValue );
 
 		// Test choosing a supported format
-		$this->mockIniAllowed = array( 'php', 'php_binary' );
+		$this->mockIniAllowed = [ 'php', 'php_binary' ];
 		$this->mockIniValue = 'bogus';
 		$ret = PhpSessionSerializer::setSerializeHandler();
 		$this->assertSame( 'php', $this->mockIniValue );
 		$this->assertSame( $ret, $this->mockIniValue );
 
 		// Test failure
-		$this->mockIniAllowed = array( 'nothing', 'useful' );
+		$this->mockIniAllowed = [ 'nothing', 'useful' ];
 		$this->mockIniValue = 'bogus';
 		try {
 			PhpSessionSerializer::setSerializeHandler();
@@ -167,26 +167,26 @@ class PhpSessionSerializerTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public static function provideHandlers() {
-		return array(
-			array( 'php', 'test|b:1;' ),
-			array( 'php_binary', "\x04testb:1;" ),
-			array( 'php_serialize', 'a:1:{s:4:"test";b:1;}' ),
-			array( 'bogus', new \DomainException( 'Unsupported format "bogus"' ) ),
-			array(
+		return [
+			[ 'php', 'test|b:1;' ],
+			[ 'php_binary', "\x04testb:1;" ],
+			[ 'php_serialize', 'a:1:{s:4:"test";b:1;}' ],
+			[ 'bogus', new \DomainException( 'Unsupported format "bogus"' ) ],
+			[
 				false,
 				new \UnexpectedValueException( 'Could not fetch the value of session.serialize_handler' )
-			),
-		);
+			],
+		];
 	}
 
 	/**
 	 * @dataProvider provideHandlers
 	 */
 	public function testEncode( $format, $encoded ) {
-		$this->mockIniAllowed = array( 'php_serialize', 'php', 'php_binary' );
+		$this->mockIniAllowed = [ 'php_serialize', 'php', 'php_binary' ];
 		$this->mockIniValue = $format;
 
-		$data = array( 'test' => true );
+		$data = [ 'test' => true ];
 		if ( $encoded instanceof \Exception ) {
 			try {
 				PhpSessionSerializer::encode( $data );
@@ -204,10 +204,10 @@ class PhpSessionSerializerTest extends \PHPUnit_Framework_TestCase {
 	 * @dataProvider provideHandlers
 	 */
 	public function testDecode( $format, $encoded ) {
-		$this->mockIniAllowed = array( 'php_serialize', 'php', 'php_binary' );
+		$this->mockIniAllowed = [ 'php_serialize', 'php', 'php_binary' ];
 		$this->mockIniValue = $format;
 
-		$data = array( 'test' => true );
+		$data = [ 'test' => true ];
 		if ( $encoded instanceof \Exception ) {
 			try {
 				PhpSessionSerializer::decode( '' );
@@ -223,8 +223,8 @@ class PhpSessionSerializerTest extends \PHPUnit_Framework_TestCase {
 
 	public static function provideEncodePhp() {
 		self::initTestData();
-		return array(
-			'std' => array(
+		return [
+			'std' => [
 				self::$standardArray,
 				'true|b:1;false|b:0;int|i:42;zero|i:0;double|d:12.75;inf|d:INF;-inf|d:-INF;string|s:' .
 					'6:"string";empty string|s:0:"";array|a:6:{i:0;i:0;i:1;i:1;i:100;i:100;i:3;i:3;i:2;i' .
@@ -232,37 +232,37 @@ class PhpSessionSerializerTest extends \PHPUnit_Framework_TestCase {
 					'oo";}empty object|O:8:"stdClass":0:{}null|N;|s:9:"empty key";long key -------------' .
 					'-----------------------------------------------------------------------------------' .
 					'-----------------------|s:8:"long key";',
-				array(
-					array( LogLevel::WARNING, 'Ignoring unsupported integer key "42"' ),
-				),
-			),
-			array(
-				array( 'pipe|key' => 'piped' ),
+				[
+					[ LogLevel::WARNING, 'Ignoring unsupported integer key "42"' ],
+				],
+			],
+			[
+				[ 'pipe|key' => 'piped' ],
 				null,
-				array(
-					array( LogLevel::ERROR, 'Serialization failed: Key with unsupported characters "pipe|key"' ),
-				),
-			),
-			array(
-				array( 'bang!key' => 'banged' ),
+				[
+					[ LogLevel::ERROR, 'Serialization failed: Key with unsupported characters "pipe|key"' ],
+				],
+			],
+			[
+				[ 'bang!key' => 'banged' ],
 				null,
-				array(
-					array( LogLevel::ERROR, 'Serialization failed: Key with unsupported characters "bang!key"' ),
-				),
-			),
-			array(
-				array( 'nan' => NAN ),
+				[
+					[ LogLevel::ERROR, 'Serialization failed: Key with unsupported characters "bang!key"' ],
+				],
+			],
+			[
+				[ 'nan' => NAN ],
 				'nan|d:NAN;',
-				array(),
-			),
-			array(
-				array( 'function' => self::$closure ),
+				[],
+			],
+			[
+				[ 'function' => self::$closure ],
 				null,
-				array(
-					array( LogLevel::ERROR, 'Value serialization failed: [serialize Closure error]' ),
-				),
-			),
-		);
+				[
+					[ LogLevel::ERROR, 'Value serialization failed: [serialize Closure error]' ],
+				],
+			],
+		];
 	}
 
 	public static function provideDecodePhp() {
@@ -270,57 +270,57 @@ class PhpSessionSerializerTest extends \PHPUnit_Framework_TestCase {
 			return $x[1] !== null;
 		} );
 		unset( $ret['std'][0][42] );
-		$ret['std'][2] = array();
+		$ret['std'][2] = [];
 
-		$ret[] = array(
+		$ret[] = [
 			null,
 			'test|i:042;',
-			array(
-				array(
+			[
+				[
 					LogLevel::ERROR, 'Value unserialization failed: read value does not match original string'
-				)
-			),
-		);
-		$ret[] = array(
+				]
+			],
+		];
+		$ret[] = [
 			null,
 			'test|i:42',
-			array(
-				array(
+			[
+				[
 					LogLevel::ERROR, 'Value unserialization failed: [unserialize error]'
-				)
-			),
-		);
-		$ret[] = array(
+				]
+			],
+		];
+		$ret[] = [
 			null,
 			'test|i:42;X|',
-			array(
-				array( LogLevel::ERROR, 'Unserialize failed: unexpected end of string' )
-			),
-		);
-		$ret[] = array(
-			array( 'test' => 42, 'test2' => 43 ),
+			[
+				[ LogLevel::ERROR, 'Unserialize failed: unexpected end of string' ]
+			],
+		];
+		$ret[] = [
+			[ 'test' => 42, 'test2' => 43 ],
 			'test|i:42;test2|i:43;X!',
-			array(),
-		);
-		$ret[] = array(
-			array( 'test' => 42, 'X!test2' => 43 ),
+			[],
+		];
+		$ret[] = [
+			[ 'test' => 42, 'X!test2' => 43 ],
 			'test|i:42;X!test2|i:43;',
-			array(
-				array( LogLevel::WARNING, 'Decoding found a key with unsupported characters: "X!test2"' )
-			),
-		);
-		$ret[] = array(
-			array(),
+			[
+				[ LogLevel::WARNING, 'Decoding found a key with unsupported characters: "X!test2"' ]
+			],
+		];
+		$ret[] = [
+			[],
 			'test!',
-			array(),
-		);
-		$ret[] = array(
-			array( 'test' => 42 ),
+			[],
+		];
+		$ret[] = [
+			[ 'test' => 42 ],
 			'test|i:42;test2',
-			array(
-				array( LogLevel::WARNING, 'Ignoring garbage at end of string' )
-			),
-		);
+			[
+				[ LogLevel::WARNING, 'Ignoring garbage at end of string' ]
+			],
+		];
 
 		return $ret;
 	}
@@ -352,42 +352,42 @@ class PhpSessionSerializerTest extends \PHPUnit_Framework_TestCase {
 
 	public static function provideEncodePhpBinary() {
 		self::initTestData();
-		return array(
-			'std' => array(
+		return [
+			'std' => [
 				self::$standardArray,
 				"\x04trueb:1;\x05falseb:0;\x03inti:42;\x04zeroi:0;\x06doubled:12.75;\x03infd:INF;\x04" .
 					"-infd:-INF;\x06strings:6:\"string\";\x0cempty strings:0:\"\";\x05arraya:6:{i:0;i:0;i:1;" .
 					"i:1;i:100;i:100;i:3;i:3;i:2;i:2;s:3:\"foo\";s:3:\"bar\";}\x0bempty arraya:0:{}\x06object" .
 					"O:8:\"stdClass\":1:{s:3:\"foo\";s:3:\"foo\";}\x0cempty objectO:8:\"stdClass\":0:{}\x04" .
 					"nullN;\0s:9:\"empty key\";",
-				array(
-					array( LogLevel::WARNING, 'Ignoring unsupported integer key "42"' ),
-					array( LogLevel::WARNING, 'Ignoring overlong key "' . self::$longKey . '"' ),
-				),
-			),
-			array(
-				array( 'pipe|key' => 'piped' ),
+				[
+					[ LogLevel::WARNING, 'Ignoring unsupported integer key "42"' ],
+					[ LogLevel::WARNING, 'Ignoring overlong key "' . self::$longKey . '"' ],
+				],
+			],
+			[
+				[ 'pipe|key' => 'piped' ],
 				"\x08pipe|keys:5:\"piped\";",
-				array(),
-			),
-			array(
-				array( 'bang!key' => 'banged' ),
+				[],
+			],
+			[
+				[ 'bang!key' => 'banged' ],
 				"\x08bang!keys:6:\"banged\";",
-				array(),
-			),
-			array(
-				array( 'nan' => NAN ),
+				[],
+			],
+			[
+				[ 'nan' => NAN ],
 				"\x03nand:NAN;",
-				array(),
-			),
-			array(
-				array( 'function' => self::$closure ),
+				[],
+			],
+			[
+				[ 'function' => self::$closure ],
 				null,
-				array(
-					array( LogLevel::ERROR, 'Value serialization failed: [serialize Closure error]' ),
-				),
-			),
-		);
+				[
+					[ LogLevel::ERROR, 'Value serialization failed: [serialize Closure error]' ],
+				],
+			],
+		];
 	}
 
 	public static function provideDecodePhpBinary() {
@@ -396,54 +396,54 @@ class PhpSessionSerializerTest extends \PHPUnit_Framework_TestCase {
 		} );
 		unset( $ret['std'][0][42] );
 		unset( $ret['std'][0][self::$longKey] );
-		$ret['std'][2] = array();
+		$ret['std'][2] = [];
 
-		$ret[] = array(
+		$ret[] = [
 			null,
 			"\x04testi:042;",
-			array(
-				array(
+			[
+				[
 					LogLevel::ERROR, 'Value unserialization failed: read value does not match original string'
-				)
-			),
-		);
-		$ret[] = array(
+				]
+			],
+		];
+		$ret[] = [
 			null,
 			"\x04testi:42",
-			array(
-				array(
+			[
+				[
 					LogLevel::ERROR, 'Value unserialization failed: [unserialize error]'
-				)
-			),
-		);
-		$ret[] = array(
+				]
+			],
+		];
+		$ret[] = [
 			null,
 			"\x50test",
-			array(
-				array(
+			[
+				[
 					LogLevel::ERROR, 'Unserialize failed: unexpected end of string'
-				)
-			),
-		);
-		$ret[] = array(
+				]
+			],
+		];
+		$ret[] = [
 			null,
 			"\x04test",
-			array(
-				array(
+			[
+				[
 					LogLevel::ERROR, 'Unserialize failed: unexpected end of string'
-				)
-			),
-		);
-		$ret[] = array(
-			array( 'test' => 42, 'test2' => 43 ),
+				]
+			],
+		];
+		$ret[] = [
+			[ 'test' => 42, 'test2' => 43 ],
 			"\x04testi:42;\x05test2i:43;\x81X",
-			array(),
-		);
-		$ret[] = array(
-			array(),
+			[],
+		];
+		$ret[] = [
+			[],
 			"\x84test",
-			array(),
-		);
+			[],
+		];
 
 		return $ret;
 	}
@@ -475,8 +475,8 @@ class PhpSessionSerializerTest extends \PHPUnit_Framework_TestCase {
 
 	public static function provideEncodePhpSerialize() {
 		self::initTestData();
-		return array(
-			array(
+		return [
+			[
 				self::$standardArray,
 				'a:17:{s:4:"true";b:1;s:5:"false";b:0;s:3:"int";i:42;s:4:"zero";i:0;s:6:"double";d:1' .
 					'2.75;s:3:"inf";d:INF;s:4:"-inf";d:-INF;s:6:"string";s:6:"string";s:12:"empty string"' .
@@ -485,31 +485,31 @@ class PhpSessionSerializerTest extends \PHPUnit_Framework_TestCase {
 					':12:"empty object";O:8:"stdClass":0:{}s:4:"null";N;s:0:"";s:9:"empty key";i:42;i:42;' .
 					's:128:"long key --------------------------------------------------------------------' .
 					'---------------------------------------------------";s:8:"long key";}',
-				array(),
-			),
-			array(
-				array( 'pipe|key' => 'piped' ),
+				[],
+			],
+			[
+				[ 'pipe|key' => 'piped' ],
 				'a:1:{s:8:"pipe|key";s:5:"piped";}',
-				array(),
-			),
-			array(
-				array( 'bang!key' => 'banged' ),
+				[],
+			],
+			[
+				[ 'bang!key' => 'banged' ],
 				'a:1:{s:8:"bang!key";s:6:"banged";}',
-				array(),
-			),
-			array(
-				array( 'nan' => NAN ),
+				[],
+			],
+			[
+				[ 'nan' => NAN ],
 				'a:1:{s:3:"nan";d:NAN;}',
-				array(),
-			),
-			array(
-				array( 'function' => self::$closure ),
+				[],
+			],
+			[
+				[ 'function' => self::$closure ],
 				null,
-				array(
-					array( LogLevel::ERROR, 'PHP serialization failed: [serialize Closure error]' ),
-				),
-			),
-		);
+				[
+					[ LogLevel::ERROR, 'PHP serialization failed: [serialize Closure error]' ],
+				],
+			],
+		];
 	}
 
 	public static function provideDecodePhpSerialize() {
@@ -517,22 +517,22 @@ class PhpSessionSerializerTest extends \PHPUnit_Framework_TestCase {
 			return $x[1] !== null;
 		} );
 
-		$ret[] = array(
+		$ret[] = [
 			null,
 			'Bogus',
-			array(
-				array(
+			[
+				[
 					LogLevel::ERROR, 'PHP unserialization failed: [unserialize error]'
-				)
-			),
-		);
-		$ret[] = array(
+				]
+			],
+		];
+		$ret[] = [
 			null,
 			'O:8:"stdClass":1:{s:3:"foo";s:3:"bar";}',
-			array(
-				array( LogLevel::ERROR, 'PHP unserialization failed (value was not an array)' )
-			),
-		);
+			[
+				[ LogLevel::ERROR, 'PHP unserialization failed (value was not an array)' ]
+			],
+		];
 
 		return $ret;
 	}
@@ -563,12 +563,12 @@ class PhpSessionSerializerTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public static function provideDecoders() {
-		return array(
-			array( 'decode' ),
-			array( 'decodePhp' ),
-			array( 'decodePhpBinary' ),
-			array( 'decodePhpSerialize' ),
-		);
+		return [
+			[ 'decode' ],
+			[ 'decodePhp' ],
+			[ 'decodePhpBinary' ],
+			[ 'decodePhpSerialize' ],
+		];
 	}
 
 	/**
@@ -577,7 +577,7 @@ class PhpSessionSerializerTest extends \PHPUnit_Framework_TestCase {
 	 * @expectedExceptionMessage $data must be a string
 	 */
 	public function testDecoderTypeCheck( $method ) {
-		call_user_func( array( '\\Wikimedia\\PhpSessionSerializer', $method ), 1 );
+		call_user_func( [ '\\Wikimedia\\PhpSessionSerializer', $method ], 1 );
 	}
 
 }
@@ -585,7 +585,7 @@ class PhpSessionSerializerTest extends \PHPUnit_Framework_TestCase {
 class TestLogger extends \Psr\Log\AbstractLogger {
 	private $collect = false;
 	private $redact = null;
-	private $buffer = array();
+	private $buffer = [];
 
 	public function __construct( $collect = false, $closure = null ) {
 		$this->collect = $collect;
@@ -596,30 +596,30 @@ class TestLogger extends \Psr\Log\AbstractLogger {
 		return $this->buffer;
 	}
 
-	public function log( $level, $message, array $context = array() ) {
+	public function log( $level, $message, array $context = [] ) {
 		$message = trim( $message );
 
 		if ( $this->collect ) {
 			// HHVM and Zend produce different error messages, correct for that.
 			$message = preg_replace(
-				'/(?:' . join( '|', array(
+				'/(?:' . join( '|', [
 					'unserialize\(\): Error at offset 0 of [45] bytes',
 					'Unable to unserialize: \[.*\]. Unexpected end of buffer during unserialization.',
 					'Unable to unserialize: \[Bogus\]. Expected \':\' but got \'o\'.',
-				) ) . ')$/',
+				] ) . ')$/',
 				'[unserialize error]',
 				$message
 			);
 			$message = preg_replace(
-				'/(?:' . join( '|', array(
+				'/(?:' . join( '|', [
 					'Serialization of \'Closure\' is not allowed',
 					'Attempted to serialize unserializable builtin class Closure\$\S+'
-				) ) . ')$/',
+				] ) . ')$/',
 				'[serialize Closure error]',
 				$message
 			);
 
-			$this->buffer[] = array( $level, $message );
+			$this->buffer[] = [ $level, $message ];
 		} else {
 			echo "LOG[$level]: $message\n";
 		}
