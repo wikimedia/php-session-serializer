@@ -44,6 +44,7 @@ class PhpSessionSerializer {
 
 	/**
 	 * Set the logger to which to log
+	 * @param LoggerInterface $logger The logger
 	 */
 	public static function setLogger( LoggerInterface $logger ) {
 		self::$logger = $logger;

@@ -26,6 +26,7 @@
 namespace Wikimedia;
 
 use Wikimedia\PhpSessionSerializer;
+use Wikimedia\PhpSessionSerializer\TestLogger;
 use Psr\Log\LogLevel;
 
 // Wikimedia\PhpSessionSerializer relies on the auto-importing of ini_set and
@@ -580,48 +581,4 @@ class PhpSessionSerializerTest extends \PHPUnit_Framework_TestCase {
 		call_user_func( [ '\\Wikimedia\\PhpSessionSerializer', $method ], 1 );
 	}
 
-}
-
-class TestLogger extends \Psr\Log\AbstractLogger {
-	private $collect = false;
-	private $redact = null;
-	private $buffer = [];
-
-	public function __construct( $collect = false, $closure = null ) {
-		$this->collect = $collect;
-		$this->redact = null;
-	}
-
-	public function getBuffer() {
-		return $this->buffer;
-	}
-
-	public function log( $level, $message, array $context = [] ) {
-		$message = trim( $message );
-
-		if ( $this->collect ) {
-			// HHVM and Zend produce different error messages, correct for that.
-			$message = preg_replace(
-				'/(?:' . join( '|', [
-					'unserialize\(\): Error at offset 0 of [45] bytes',
-					'Unable to unserialize: \[.*\]. Unexpected end of buffer during unserialization.',
-					'Unable to unserialize: \[Bogus\]. Expected \':\' but got \'o\'.',
-				] ) . ')$/',
-				'[unserialize error]',
-				$message
-			);
-			$message = preg_replace(
-				'/(?:' . join( '|', [
-					'Serialization of \'Closure\' is not allowed',
-					'Attempted to serialize unserializable builtin class Closure\$\S+'
-				] ) . ')$/',
-				'[serialize Closure error]',
-				$message
-			);
-
-			$this->buffer[] = [ $level, $message ];
-		} else {
-			echo "LOG[$level]: $message\n";
-		}
-	}
 }
