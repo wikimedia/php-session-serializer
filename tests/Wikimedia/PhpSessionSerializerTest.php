@@ -25,7 +25,6 @@
 
 namespace Wikimedia;
 
-use Wikimedia\PhpSessionSerializer;
 use Wikimedia\PhpSessionSerializer\TestLogger;
 use Psr\Log\LogLevel;
 

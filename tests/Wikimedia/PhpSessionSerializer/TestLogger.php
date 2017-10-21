@@ -25,8 +25,6 @@
 
 namespace Wikimedia\PhpSessionSerializer;
 
-use Wikimedia\PhpSessionSerializer;
-
 class TestLogger extends \Psr\Log\AbstractLogger {
 	private $collect = false;
 	private $buffer = [];
