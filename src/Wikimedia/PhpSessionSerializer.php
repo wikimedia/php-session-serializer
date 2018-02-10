@@ -66,9 +66,9 @@ class PhpSessionSerializer {
 		];
 
 		// First, try php_serialize since that's the only one that doesn't suck in some way.
-		\MediaWiki\suppressWarnings();
+		\Wikimedia\suppressWarnings();
 		ini_set( 'session.serialize_handler', 'php_serialize' );
-		\MediaWiki\restoreWarnings();
+		\Wikimedia\restoreWarnings();
 		if ( ini_get( 'session.serialize_handler' ) === 'php_serialize' ) {
 			return 'php_serialize';
 		}
@@ -81,9 +81,9 @@ class PhpSessionSerializer {
 
 		// Last chance, see if any of our supported formats are accepted.
 		foreach ( $formats as $format ) {
-			\MediaWiki\suppressWarnings();
+			\Wikimedia\suppressWarnings();
 			ini_set( 'session.serialize_handler', $format );
-			\MediaWiki\restoreWarnings();
+			\Wikimedia\restoreWarnings();
 			if ( ini_get( 'session.serialize_handler' ) === $format ) {
 				return $format;
 			}
