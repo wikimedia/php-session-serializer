@@ -50,7 +50,7 @@ function ini_get( $var ) {
 /**
  * @covers Wikimedia\PhpSessionSerializer
  */
-class PhpSessionSerializerTest extends \PHPUnit_Framework_TestCase {
+class PhpSessionSerializerTest extends \PHPUnit\Framework\TestCase {
 
 	protected $oldFormat;
 

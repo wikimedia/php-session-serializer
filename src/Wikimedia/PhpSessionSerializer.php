@@ -91,7 +91,7 @@ class PhpSessionSerializer {
 
 		throw new \DomainException(
 			'Failed to set serialize handler to a supported format.' .
-				' Supported formats are: ' . join( ', ', $formats ) . '.'
+				' Supported formats are: ' . implode( ', ', $formats ) . '.'
 		);
 	}
 
