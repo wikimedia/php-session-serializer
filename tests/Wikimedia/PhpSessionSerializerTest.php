@@ -121,15 +121,27 @@ class PhpSessionSerializerTest extends \PHPUnit\Framework\TestCase {
 	protected function tearDown() {
 		global $wgMockIniInstance;
 		$wgMockIniInstance = null;
-		\ini_set( 'session.serialize_handler', $this->oldFormat );
+		$this->assertSame( $this->oldFormat, \ini_get( 'session.serialize_handler' ),
+		   'Assert that the test didn\'t change the ini setting' );
 		parent::tearDown();
 	}
 
 	public function testSetSerializeHandler() {
-		// Test normal operation
-		$ret = PhpSessionSerializer::setSerializeHandler();
-		$this->assertSame( $ret, \ini_get( 'session.serialize_handler' ) );
+		if ( version_compare( PHP_VERSION, '7.2' ) >= 0 ) {
+			$this->markTestSkipped(
+				'PHP 7.2 broke setting session ini settings from unit tests'
+			);
+		}
 
+		try {
+			$ret = PhpSessionSerializer::setSerializeHandler();
+			$this->assertSame( $ret, \ini_get( 'session.serialize_handler' ) );
+		} finally {
+			\ini_set( 'session.serialize_handler', $this->oldFormat );
+		}
+	}
+
+	public function testSetSerializeHandlerMocked() {
 		// Test setting php_serialize
 		$this->mockIniAllowed = [ 'php_serialize', 'php', 'php_binary' ];
 		$this->mockIniValue = 'php_binary';
