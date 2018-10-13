@@ -127,12 +127,6 @@ class PhpSessionSerializerTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testSetSerializeHandler() {
-		if ( version_compare( PHP_VERSION, '7.2' ) >= 0 ) {
-			$this->markTestSkipped(
-				'PHP 7.2 broke setting session ini settings from unit tests'
-			);
-		}
-
 		try {
 			$ret = PhpSessionSerializer::setSerializeHandler();
 			$this->assertSame( $ret, \ini_get( 'session.serialize_handler' ) );

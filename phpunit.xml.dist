@@ -1,6 +1,7 @@
 <phpunit colors="true"
 	beStrictAboutTestsThatDoNotTestAnything="true"
-	beStrictAboutOutputDuringTests="true">
+	beStrictAboutOutputDuringTests="true"
+	stderr="true">
 	<testsuites>
 		<testsuite name="php-session-serializer Tests">
 			<directory>./tests</directory>
