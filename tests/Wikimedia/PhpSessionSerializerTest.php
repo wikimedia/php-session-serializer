@@ -109,7 +109,7 @@ class PhpSessionSerializerTest extends \PHPUnit\Framework\TestCase {
 		};
 	}
 
-	protected function setUp() {
+	protected function setUp() : void {
 		global $wgMockIniInstance;
 		parent::setUp();
 		$this->oldFormat = \ini_get( 'session.serialize_handler' );
@@ -118,7 +118,7 @@ class PhpSessionSerializerTest extends \PHPUnit\Framework\TestCase {
 		$this->mockIniValue = $this->oldFormat;
 	}
 
-	protected function tearDown() {
+	protected function tearDown() : void {
 		global $wgMockIniInstance;
 		$wgMockIniInstance = null;
 		$this->assertSame( $this->oldFormat, \ini_get( 'session.serialize_handler' ),

@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <ruleset>
 	<rule ref="./vendor/mediawiki/mediawiki-codesniffer/MediaWiki">
+		<exclude name="MediaWiki.Commenting.PhpunitAnnotations.ForbiddenExpectedException" />
+		<exclude name="MediaWiki.Commenting.PhpunitAnnotations.ForbiddenExpectedExceptionMessage" />
 		<exclude name="MediaWiki.WhiteSpace.SpaceBeforeSingleLineComment.NewLineComment" />
 	</rule>
 	<file>.</file>
