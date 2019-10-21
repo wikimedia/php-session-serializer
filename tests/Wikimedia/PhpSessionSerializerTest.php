@@ -25,8 +25,9 @@
 
 namespace Wikimedia;
 
-use Wikimedia\PhpSessionSerializer\TestLogger;
+use InvalidArgumentException;
 use Psr\Log\LogLevel;
+use Wikimedia\PhpSessionSerializer\TestLogger;
 
 // Wikimedia\PhpSessionSerializer relies on the auto-importing of ini_set and
 // ini_get from the global namespace. In this unit test, we override these with
@@ -265,7 +266,7 @@ class PhpSessionSerializerTest extends \PHPUnit\Framework\TestCase {
 				[ 'function' => self::$closure ],
 				null,
 				[
-					[ LogLevel::ERROR, 'Value serialization failed: [serialize Closure error]' ],
+					[ LogLevel::ERROR, "Value serialization failed: Serialization of 'Closure' is not allowed" ],
 				],
 			],
 		];
@@ -390,7 +391,7 @@ class PhpSessionSerializerTest extends \PHPUnit\Framework\TestCase {
 				[ 'function' => self::$closure ],
 				null,
 				[
-					[ LogLevel::ERROR, 'Value serialization failed: [serialize Closure error]' ],
+					[ LogLevel::ERROR, "Value serialization failed: Serialization of 'Closure' is not allowed" ],
 				],
 			],
 		];
@@ -512,7 +513,7 @@ class PhpSessionSerializerTest extends \PHPUnit\Framework\TestCase {
 				[ 'function' => self::$closure ],
 				null,
 				[
-					[ LogLevel::ERROR, 'PHP serialization failed: [serialize Closure error]' ],
+					[ LogLevel::ERROR, "PHP serialization failed: Serialization of 'Closure' is not allowed" ],
 				],
 			],
 		];
@@ -579,10 +580,10 @@ class PhpSessionSerializerTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @dataProvider provideDecoders
-	 * @expectedException InvalidArgumentException
-	 * @expectedExceptionMessage $data must be a string
 	 */
 	public function testDecoderTypeCheck( $method ) {
+		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( '$data must be a string' );
 		call_user_func( [ '\\Wikimedia\\PhpSessionSerializer', $method ], 1 );
 	}
 

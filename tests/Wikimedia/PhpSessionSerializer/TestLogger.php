@@ -49,22 +49,9 @@ class TestLogger extends \Psr\Log\AbstractLogger {
 		$message = trim( $message );
 
 		if ( $this->collect ) {
-			// HHVM and Zend produce different error messages, correct for that.
 			$message = preg_replace(
-				'/(?:' . implode( '|', [
-					'unserialize\(\): Error at offset 0 of [45] bytes',
-					'Unable to unserialize: \[.*\]. Unexpected end of buffer during unserialization.',
-					'Unable to unserialize: \[Bogus\]. Expected \':\' but got \'o\'.',
-				] ) . ')$/',
+				'/unserialize\(\): Error at offset 0 of [45] bytes$/',
 				'[unserialize error]',
-				$message
-			);
-			$message = preg_replace(
-				'/(?:' . implode( '|', [
-					'Serialization of \'Closure\' is not allowed',
-					'Attempted to serialize unserializable builtin class Closure\$\S+'
-				] ) . ')$/',
-				'[serialize Closure error]',
 				$message
 			);
 
