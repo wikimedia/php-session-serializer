@@ -10,3 +10,4 @@
 .#*
 .*.swp
 *.orig
+/.phpunit.result.cache
