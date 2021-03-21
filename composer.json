@@ -21,7 +21,7 @@
 	},
 	"require": {
 		"php": ">=7.2.9",
-		"wikimedia/at-ease": "2.0.0",
+		"wikimedia/at-ease": "^2.0.0",
 		"psr/log": "^1.0"
 	},
 	"require-dev": {
