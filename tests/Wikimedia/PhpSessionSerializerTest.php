@@ -106,7 +106,7 @@ class PhpSessionSerializerTest extends \PHPUnit\Framework\TestCase {
 			self::$longKey => 'long key',
 		];
 
-		self::$closure = function () {
+		self::$closure = static function () {
 		};
 	}
 
@@ -273,7 +273,7 @@ class PhpSessionSerializerTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public static function provideDecodePhp() {
-		$ret = array_filter( self::provideEncodePhp(), function ( $x ) {
+		$ret = array_filter( self::provideEncodePhp(), static function ( $x ) {
 			return $x[1] !== null;
 		} );
 		unset( $ret['std'][0][42] );
@@ -398,7 +398,7 @@ class PhpSessionSerializerTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public static function provideDecodePhpBinary() {
-		$ret = array_filter( self::provideEncodePhpBinary(), function ( $x ) {
+		$ret = array_filter( self::provideEncodePhpBinary(), static function ( $x ) {
 			return $x[1] !== null;
 		} );
 		unset( $ret['std'][0][42] );
@@ -520,7 +520,7 @@ class PhpSessionSerializerTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public static function provideDecodePhpSerialize() {
-		$ret = array_filter( self::provideEncodePhpSerialize(), function ( $x ) {
+		$ret = array_filter( self::provideEncodePhpSerialize(), static function ( $x ) {
 			return $x[1] !== null;
 		} );
 

@@ -179,7 +179,7 @@ class PhpSessionSerializer {
 	 */
 	private static function unserializeValue( &$string ) {
 		$error = null;
-		set_error_handler( function ( $errno, $errstr ) use ( &$error ) {
+		set_error_handler( static function ( $errno, $errstr ) use ( &$error ) {
 			$error = $errstr;
 			return true;
 		} );
@@ -373,7 +373,7 @@ class PhpSessionSerializer {
 		}
 
 		$error = null;
-		set_error_handler( function ( $errno, $errstr ) use ( &$error ) {
+		set_error_handler( static function ( $errno, $errstr ) use ( &$error ) {
 			$error = $errstr;
 			return true;
 		} );
