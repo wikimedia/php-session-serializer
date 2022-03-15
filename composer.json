@@ -26,6 +26,7 @@
 	},
 	"require-dev": {
 		"mediawiki/mediawiki-codesniffer": "38.0.0",
+		"mediawiki/mediawiki-phan-config": "0.11.1",
 		"mediawiki/minus-x": "1.1.1",
 		"php-parallel-lint/php-console-highlighter": "0.5.0",
 		"php-parallel-lint/php-parallel-lint": "1.3.1",
@@ -36,6 +37,7 @@
 			"parallel-lint . --exclude vendor",
 			"phpunit $PHPUNIT_ARGS",
 			"@phpcs",
+			"phan --allow-polyfill-parser --long-progress-bar",
 			"minus-x check ."
 		],
 		"cover": "phpunit --coverage-html coverage",
@@ -43,6 +45,7 @@
 			"minus-x fix .",
 			"phpcbf"
 		],
+		"phan": "phan -d . --long-progress-bar",
 		"phpcs": "phpcs -sp --cache"
 	}
 }
