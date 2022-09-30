@@ -270,7 +270,7 @@ class PhpSessionSerializer {
 				return null;
 			}
 
-			list( $ok, $value ) = self::unserializeValue( $data );
+			[ $ok, $value ] = self::unserializeValue( $data );
 			if ( !$ok ) {
 				return null;
 			}
@@ -341,7 +341,7 @@ class PhpSessionSerializer {
 				return null;
 			}
 
-			list( $ok, $value ) = self::unserializeValue( $data );
+			[ $ok, $value ] = self::unserializeValue( $data );
 			if ( !$ok ) {
 				return null;
 			}
