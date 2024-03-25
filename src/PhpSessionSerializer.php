@@ -30,7 +30,6 @@ use Exception;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use UnexpectedValueException;
-use Wikimedia\AtEase\AtEase;
 
 /**
  * Provides for encoding and decoding session arrays to PHP's serialization
@@ -71,9 +70,8 @@ class PhpSessionSerializer {
 		];
 
 		// First, try php_serialize since that's the only one that doesn't suck in some way.
-		AtEase::suppressWarnings();
-		ini_set( 'session.serialize_handler', 'php_serialize' );
-		AtEase::restoreWarnings();
+		// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+		@ini_set( 'session.serialize_handler', 'php_serialize' );
 		if ( ini_get( 'session.serialize_handler' ) === 'php_serialize' ) {
 			return 'php_serialize';
 		}
@@ -86,9 +84,8 @@ class PhpSessionSerializer {
 
 		// Last chance, see if any of our supported formats are accepted.
 		foreach ( $formats as $format ) {
-			AtEase::suppressWarnings();
-			ini_set( 'session.serialize_handler', $format );
-			AtEase::restoreWarnings();
+			// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+			@ini_set( 'session.serialize_handler', $format );
 			if ( ini_get( 'session.serialize_handler' ) === $format ) {
 				return $format;
 			}
