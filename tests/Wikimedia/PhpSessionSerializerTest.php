@@ -584,7 +584,7 @@ class PhpSessionSerializerTest extends \PHPUnit\Framework\TestCase {
 	public function testDecoderTypeCheck( $method ) {
 		$this->expectException( InvalidArgumentException::class );
 		$this->expectExceptionMessage( '$data must be a string' );
-		call_user_func( [ '\\Wikimedia\\PhpSessionSerializer', $method ], 1 );
+		PhpSessionSerializer::$method( 1 );
 	}
 
 }
