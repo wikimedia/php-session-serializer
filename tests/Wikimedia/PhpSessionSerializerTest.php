@@ -53,12 +53,20 @@ function ini_get( $var ) {
  */
 class PhpSessionSerializerTest extends \PHPUnit\Framework\TestCase {
 
+	/** @var string|null */
 	protected $oldFormat;
 
+	/** @var string[]|null */
 	protected $mockIniAllowed;
+	/** @var string|null */
 	protected $mockIniValue;
 
-	protected static $standardArray, $longKey, $closure;
+	/** @var array */
+	protected static $standardArray;
+	/** @var string */
+	protected static $longKey;
+	/** @var callable */
+	protected static $closure;
 
 	public function mockIniGet( $var ) {
 		if ( $var !== 'session.serialize_handler' || !is_array( $this->mockIniAllowed ) ) {
