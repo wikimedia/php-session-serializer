@@ -47,7 +47,7 @@ class TestLogger extends \Psr\Log\AbstractLogger {
 	}
 
 	/** @inheritDoc */
-	public function log( $level, $message, array $context = [] ) {
+	public function log( $level, $message, array $context = [] ): void {
 		$message = trim( $message );
 
 		if ( $this->collect ) {
